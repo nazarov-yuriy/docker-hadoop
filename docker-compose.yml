@@ -89,6 +89,27 @@ services:
     env_file:
       - ./hbase-standalone.env
 
+  sparkmaster:
+    image: bde2020/sparkmaster:spark3.0.0-hadoop3.2.1-java8
+    container_name: sparkmaster
+    restart: always
+    hostname: sparkmaster
+    ports:
+      - 8080:8080
+      - 7077:7077
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000"
+
+  sparkworker:
+    image: bde2020/sparkworker:spark3.0.0-hadoop3.2.1-java8
+    container_name: sparkworker
+    restart: always
+    hostname: sparkworker
+    ports:
+      - 8081:8081
+    environment:
+      SERVICE_PRECONDITION: "sparkmaster:8080"
+
 volumes:
   hadoop_namenode:
   hadoop_datanode:
